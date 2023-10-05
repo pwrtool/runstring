@@ -12,13 +12,13 @@ tool:my-tool;from:/home/firesquid/source/mycoolprojet;args:[arg1:hello|arg2:23];
 When the cli runs the kit, these are passed as  
 
 This string is gernerated by the CLI when a call to the kit is made, which parses it into the following data:
-```json
+```
 {
   tool: "my-tool",
-  from: "/home/firesquid/source/mycoolproject/"
+  from: "/home/firesquid/source/mycoolproject/",
   args: [
     arg1: "hello",
-    arg2: 32
+    arg2: 32,
   ],
   autoAnswer: false,
   answer: [],
