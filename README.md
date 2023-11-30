@@ -25,3 +25,7 @@ Each of the properties means:
 - arguments - a map of arguments passed as strings. It's on you to parse those into whatever they need to be.
 - autoAnswer - a boolean telling you if you can ask questions to the user. If it's true, the user is trying to automate your kit and you should respect that by using answers from the `answers` array
 - answers - a list of answers to command line questions
+
+# Some History
+
+We originally used some other stupid system that didn't use JSON for making runstrings and implemented a `parseRunstring` and `generateRunstring` function. Eventually, we realized that JSON exists and decided to delete our proprietary system for the sake of that. Some packages depended on the `parseRunstring` and `generateRunstring` functions existing, so we decided to keep them.
