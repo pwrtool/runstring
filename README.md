@@ -1,58 +1,27 @@
-# DEPRECATED
-
-This package is now deprecated. Only the types are in use.
-
 # Runstring
 
-This package is shared between the powertool cli and powertool kit packages and deals with creating and reading runstrings. If you're just a user of powertool, it doesn't matter to you. If you're a maintaner of powertool or developing highly technical kits, this may be necessary.
+Runstrings are provided as the second argument when running powertool kits. Your `run.sh` file is called with:
 
-Read more in the docs (oops, I haven't made them yet).
-
-# Wait what?
-
-Powertool uses runstrings. Here is an example:
-
-```txt
-tool:my-tool;from:/home/firesquid/source/mycoolprojet;args:[arg1:hello|arg2:23];
+```bash
+/some/path/to/a/run.sh <runstring>
 ```
 
-When the cli runs the kit, these are passed as
+The runstring is a JSON string that corresponds to the following typescript interface:
 
-This string is gernerated by the CLI when a call to the kit is made, which parses it into the following data:
-
-```
-{
-  tool: "my-tool",
-  from: "/home/firesquid/source/mycoolproject/",
-  args: [
-    arg1: "hello",
-    arg2: 32,
-  ],
-  autoAnswer: false,
-  answer: [],
+```ts
+export interface ParsedRunstring {
+  tool: string;
+  from: string;
+  arguments: Map<string, string>;
+  autoAnswer: boolean;
+  answers: string[];
 }
 ```
 
-The kit package interprets this, and runs the tool "my-tool" with the command line arguments arg1 and arg2 set to their respective values. The `from` parameter can be used by the tool to perform manipulations in the directory that it was called from.
+Each of the properties means:
 
-# What's this `autoAnswer` and `answer` thing?
-
-As you're probably aware, there are three ways for a kit to get input from a user:
-
-1. Command line arguments
-2. Checking the config file
-3. Prompting the user through stdout
-
-Command line arguments are passed through the runstring in the `args` field, and the config file is always located at `~/.config/pwrtool/config.json`, and therefore can be easily emulated by action files or other forms of automating powertools. However, automating stdout/stdin questions is difficult.
-
-THis is accomplished
-
-A runstring that utilizes this feature would look like:
-
-```
-tool:mytool;from:/home/firesquid/source/mycoolproject;arg1:hello;autoAnswer:true:answers:["wow! this is the answer to a question!"]
-```
-
-# Contributing
-
-If you're creating bindings for powertool kits in another language, you'll need to write a runstring parser and generator. Typescript is fairly easy to read even if you're not incredibly familiar with it, so use the code under `bun/index.ts` and `bun/index.test.ts` as a guide. Please write unit tests of some sort.
+- tool - the tool being run from your kit
+- from - the directory where your kit was called
+- arguments - a map of arguments passed as strings. It's on you to parse those into whatever they need to be.
+- autoAnswer - a boolean telling you if you can ask questions to the user. If it's true, the user is trying to automate your kit and you should respect that by using answers from the `answers` array
+- answers - a list of answers to command line questions
